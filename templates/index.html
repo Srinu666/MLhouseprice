@@ -7,25 +7,47 @@
     <title>House Price Prediction</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href="{{ url_for('static', filename='css/main.css') }}">
-    <script src='main.js'></script>
+    <script>
+        function validateForm(event) {
+            // Prevent form submission
+            event.preventDefault();
+
+            // Get input values
+            const bedrooms = document.forms["predictForm"]["bedrooms"].value;
+            const bathrooms = document.forms["predictForm"]["bathrooms"].value;
+            const floors = document.forms["predictForm"]["floors"].value;
+            const yr_built = document.forms["predictForm"]["yr_built"].value;
+
+            // Check if all inputs are zero or empty
+            if (
+                (!bedrooms || bedrooms == 0) &&
+                (!bathrooms || bathrooms == 0) &&
+                (!floors || floors == 0) &&
+                (!yr_built || yr_built == 0)
+            ) {
+                alert("Please enter valid values in at least one field.");
+                return false;
+            }
+
+            // Submit the form if validation passes
+            document.forms["predictForm"].submit();
+        }
+    </script>
 </head>
 
 <body>
     <div class="register_page">
         <div class="form">
-            <form action="{{url_for('predict')}}" method="POST">
-                Bedrooms: <input type="number" name='bedrooms' placeholder="Enter the no of Bedrooms"><br>
-                Bathrooms: <input type="number" name='bathrooms' placeholder="Enter the no of Bathrooms"><br>
-                Floors: <input type="number" name='floors' placeholder="Enter the no of Floors"><br>
-                Year of Build: <input type="number" name='yr_built' placeholder="Enter year of Build"><br>
+            <form name="predictForm" action="{{url_for('predict')}}" method="POST" onsubmit="validateForm(event)">
+                Bedrooms: <input type="number" name="bedrooms" placeholder="Enter the no of Bedrooms" min="0"><br>
+                Bathrooms: <input type="number" name="bathrooms" placeholder="Enter the no of Bathrooms" min="0"><br>
+                Floors: <input type="number" name="floors" placeholder="Enter the no of Floors" min="0"><br>
+                Year of Build: <input type="number" name="yr_built" placeholder="Enter year of Build" min="0"><br>
                 <input type="submit" value="predict" class="submit">
             </form>
-            <p> House Price is: {{data}}</p>
+            <p> House Price is: ₹{{data}} </p>
         </div>
-
     </div>
-
-
 </body>
 
 </html>
